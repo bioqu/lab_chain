@@ -9,10 +9,10 @@ class reactivo(models.Model):
         default='g'  # Puedes poner la unidad que más te convenga como default
     )
 
-    # Nuevo campo para la fecha de adquisición
+    # Campo para la fecha de adquisición
     fecha_adquisicion = models.DateField(null=True, blank=True, verbose_name="Fecha de Adquisición")
 
-    # Nuevo campo para las condiciones de almacenamiento
+    # Campo para las condiciones de almacenamiento
     OPCIONES_TEMPERATURA = [
         ('ambiente', 'Temperatura ambiente'),
         ('refrigerador_4', 'Refrigerador (4°C)'),
