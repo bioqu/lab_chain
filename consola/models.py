@@ -2,10 +2,20 @@ from django.db import models
 
 class reactivo(models.Model):
     nombre = models.CharField(max_length=150)
-    cantidad = models.DecimalField(max_digits=10, decimal_places=3)
+    # Campo para items o unidades de cada reactivo
+    cantidad_total = models.PositiveIntegerField()
+
+    # Campo para cantidad que hay en cada unidad o item
+    # FloatField funciona mejor que DecimalField, FIXME: en forms agregar un condicional para no evitar exceso de cifras no significativas
+    """ cantidad_por_unidad = models.DecimalField(max_digits=10, decimal_places=3) """
+    cantidad_por_unidad = models.FloatField()
+
+    # Campo empresa para reactivo
+    empresa = models.CharField(max_length=150, null=True, blank=True)
+
     unidad = models.CharField(
         max_length=100,
-        choices=[('g', 'Gramos'), ('mg', 'Miligramos'),('UL', 'microlitros'), ('mL', 'Mililitros'), ('L', 'Litros'), ],
+        choices=[('g', 'Gramos'), ('mg', 'Miligramos'),('uL', 'Microlitros'), ('mL', 'Mililitros'), ('L', 'Litros'), ],
         default='g'  # Puedes poner la unidad que más te convenga como default
     )
 
@@ -28,4 +38,6 @@ class reactivo(models.Model):
 
 
     def __str__(self):
-        return f'{self.nombre} ({self.cantidad} {self.unidad})'
+        return f'{self.nombre} ({self.cantidad_por_unidad} {self.unidad})'
+
+
