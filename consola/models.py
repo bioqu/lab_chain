@@ -1,6 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class reactivo(models.Model):
+class Reactivo(models.Model):
     nombre = models.CharField(max_length=150)
     # Campo para items o unidades de cada reactivo
     cantidad_total = models.PositiveIntegerField()
@@ -40,4 +41,19 @@ class reactivo(models.Model):
     def __str__(self):
         return f'{self.nombre} ({self.cantidad_por_unidad} {self.unidad})'
 
+class ReactivoUsado(models.Model):
+    experimento = models.ForeignKey('Experimento', on_delete=models.CASCADE)
+    reactivo = models.ForeignKey(Reactivo, on_delete=models.CASCADE)
+    cantidad_usada = models.FloatField()
 
+    def __str__(self):
+        return f'{self.cantidad_usada} {self.reactivo.unidad} de {self.reactivo.nombre}'
+
+class Experimento(models.Model):
+    reactivos = models.ManyToManyField(Reactivo, through='ReactivoUsado', verbose_name="Reactivos para experimentos")
+    staff = models.ForeignKey(User, verbose_name="Usuario", on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=150)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.staff.username} realizó el experimento {self.nombre}'
